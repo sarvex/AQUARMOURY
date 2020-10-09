@@ -101,7 +101,7 @@ I have also taken the liberty to build the `NetClone` project from **Koppeling**
 
 So continuing from Step 3 of our hunt where we left off previously:
 
-4. Compile our target-agnostic DLL. But before that let's do one more thing. Copy the malcode which we want to execute to `Bin` directory and rename it as `payload_x64.bin` so that we can locate it while building our DLL. Finally, compile by executing `compile64.bat` from an x64 Developer Command Prompt. This will also encrypt the payload using a `Python` script before embedding it as a `RCDATA` resource in our DLL. Optionally, feel free to change the passphrase used to derive the symmetric key(you really should!) [here](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Python/AES.py#L41)
+4. Compile our target-agnostic DLL. But before that let's do one more thing. Copy the malcode which we want to execute to `Bin` directory and rename it as `payload_x64.bin` so that we can locate it while building our DLL. Finally, compile by executing `compile64.bat` from an x64 Developer Command Prompt. This will also encrypt the payload using a `Python` script before embedding it as an `RCDATA` resource in our DLL. Optionally, feel free to change the passphrase used to derive the symmetric key(you really should!) [here](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Python/AES.py#L41)
 
 5. Once our DLL is built successfully(you can find it in `Bin` as `brownie_x64.dll`), we will move on to weaponizing it. From a Command Prompt, execute `prepdll.bat <Name of original DLL to clone>` which in our case would be `prepdll.bat DUI70`. On success message, we can find our weaponized evil-twin of `DUI70.dll` in `Bin` folder. We can further verify that `NetClone` worked as intended by inspecting PE sections too:
 
@@ -123,7 +123,7 @@ I'd **NOT** recommend using a C2 agent/Egress implant PIC blob as payload for th
 
 So what do we use for payload? I would recommend using a **loader PIC blob as payload** that injects the **Stage-1/Beaconing payload blob** to another process from where network activity is **NOT** considered unusual.
 
-What this technique essentially helps us achieve is cloaking/shielding the malicious activity of **Code Injection** which could give us up especially when dealing with an EDR that doesn't use User-mode hooking to gain visibility into potentially suspicious actions(can be bypassed rather easily using well-placed direct syscalls) but rather relies on **Kernel-mode ETW Threat Intelligence** functions like **MDATP**. It will still **generate telemetry but will probably allow the activity since it is originating from a MS signed, trusted and legitimate binary** :)
+What this technique essentially helps us achieve is cloaking/shielding the malicious activity of **Code Injection** which could give us up especially when dealing with an EDR that doesn't use User-mode hooking to gain visibility into potentially suspicious actions(can be bypassed rather easily using well-placed direct syscalls) but rather relies on **Kernel-mode ETW Threat Intelligence** functions like **MDATP**. It will still **generate telemetry but will probably allow the activity since it is originating from an MS signed, trusted and legitimate binary** :)
 
 ## Detection/Mitigation
 Here is a mandatory [CAPA](https://github.com/fireeye/capa) scan result of our `Brownie` DLL:
