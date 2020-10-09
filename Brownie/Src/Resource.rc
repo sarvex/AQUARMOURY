@@ -1,0 +1,3 @@
+#include "resource.h"
+
+RID_PAYLOAD RCDATA "..\\Bin\\payload_x64_encrypted.bin"
