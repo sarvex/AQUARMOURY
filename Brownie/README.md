@@ -101,24 +101,74 @@ I have also taken the liberty to build the `NetClone` project from **Koppeling**
 
 So continuing from Step 3 of our hunt where we left off previously:
 
-4. Compile our target-agnostic DLL. But before that let's do one more thing. Copy the malcode which we want to execute to `Bin` directory and rename it as `payload_x64.bin` so that we can locate it while building our DLL. Finally, compile using:
+4. Compile our target-agnostic DLL. But before that let's do one more thing. Copy the malcode which we want to execute to `Bin` directory and rename it as `payload_x64.bin` so that we can locate it while building our DLL. Finally, compile by executing `compile64.bat` from a x64 Developer Command Prompt. This will also encrypt the payload using a `Python` script before embedding it as a `RCDATA` resource in our DLL. Optionally, feel free to change the passphrase used to derive the symmetric key(you really should!) [here](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Python/AES.py#L41)
 
-From a x64 Developer Command Prompt, execute `compile64.bat`. This will also encrypt the payload using a `Python` script before embedding it as a `RCDATA` resource in our DLL.
-
-Optionally, feel free to change the passphrase used to derive the symmetric key(you really should!) [here](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Python/AES.py#L41)
-
-5. Once our DLL is built successfully(you can find it in `Bin` as `brownie_x64.dll`), we will move on to weaponizing it.
-
-From a Command Prompt, execute `prepdll.bat <Name of original DLL to clone>` which in our case would be `prepdll.bat DUI70`.
-
-On success message, we can find our weaponized evil-twin of `DUI70.dll` in `Bin` folder. We can further verify that `NetClone` worked as intended by inspecting PE sections:
+5. Once our DLL is built successfully(you can find it in `Bin` as `brownie_x64.dll`), we will move on to weaponizing it. From a Command Prompt, execute `prepdll.bat <Name of original DLL to clone>` which in our case would be `prepdll.bat DUI70`. On success message, we can find our weaponized evil-twin of `DUI70.dll` in `Bin` folder. We can further verify that `NetClone` worked as intended by inspecting PE sections too:
 
 ![Export Section](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/exports-newsection.PNG "Export Section")
 
 6. Now all that remains is to execute our target binary `LicensingUI.exe` and wait for it to load our "evil" DLL(which in turn would also load the real DLL) and execute our malcode. Aand Bingo!
 
 ![LicensingUI](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/licensingui.PNG "LicensingUI")
+Can you spot which is the real and which is our "evil" DLL? 
 
+One thing I want to point out is that I have chosen a target that stays alive until termination in order to avoid additional complexities.
+
+There are still tons of potential candidates waiting to be discovered and exploited and I can safely say this because I was able to find **6** previously unknown(or call it lesser known if you will?) `System32` executables that are vulnerable to DLL Hijacking and was able to weaponize it in less than an hour.
+
+## OPSEC Concerns
+So we used a calc payload in our demonstration but almost certainly we won't be using that in a real engagement unless we want to annoy a friend right? :)
+
+I'd **NOT** recommend using a C2 agent/Egress implant PIC blob as payload for this purpose simply beacause almost any half-decent AV/EDR would pick it up **especially if that executable does not load `Wininet.dll` or `Winhttp.dll` or is expected to not have any network activity**.
+
+So what do we use for payload? I would recommend using a **loader PIC blob as payload** that injects the **Stage-1/Beaconing payload blob** to another process from where network activity is **NOT** considered unusual.
+
+What this technique essentially helps us achieve is cloaking/shielding the malicious activity of **Code Injection** which could give us up especially when dealing with an EDR that doesn't use User-mode hooking to gain visibility into potentially suspicious actions(can be bypassed rather easily using direct sycalls) but rather **Kernel-mode ETW Threat Intelligence** functions like **MDATP**. It will still **generate telemetry but will probably allow the activity since it is originating from a MS signed, trusted and legitimate binary** :)
+
+## Detection/Mitigation
+Here is a mandatory [CAPA]() scan result of our `Brownie` DLL:
+
+![CAPA Result](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/capa.PNG "CAPA Result")
+
+And here is a Sysmon sample log with [SwiftOnSecurity](https://twitter.com/SwiftOnSecurity?) Sysmon configuration:
+
+![Sysmon Normal](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/sysmon-wo-imageload.PNG "Sysmon Normal")
+
+And here is a Sysmon sample log with Image Loaded event enabled - Sysmon Event ID 7:
+
+![Sysmon Image Load](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/sysmon-w-imageload.PNG "Sysmon Image Load")
+
+When it comes to Detection/Mitigation, [Samir Bousseaden](https://twitter.com/sbousseaden) is one of the best authorities to go to. 
+
+I want to highlight [here](https://twitter.com/SBousseaden/status/1242869201091604481) one of his tweets.
+
+In essence, a lot of false-positives could be weeded out with a rule like this if it can be made:
+```
+1. System32/SysWoW64 DLL loaded from anywhere other than their original location AND
+2. A MS-signed binary loading a non-MS signed image
+```
+
+With that being said, I agree that this requires quite a bit of baselining in target environment to produce high-quality telemetry.
+
+## Credits
+This section will consist of my favourite posts on DLL Hijacking and the authors from which I have heavily borrowed stuff from:
+
+1. [https://silentbreaksecurity.com/adaptive-dll-hijacking/](https://silentbreaksecurity.com/adaptive-dll-hijacking/) - My favourite post on DLL Hijacking
+2. [https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows](https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows) - Another awesome in-depth post detailing quite a number of binaries
+3. [https://itm4n.github.io/windows-dll-hijacking-clarified/](https://itm4n.github.io/windows-dll-hijacking-clarified/) - Another nice read to clarify some stuff
+4. [https://posts.specterops.io/automating-dll-hijack-discovery-81c4295904b0](https://posts.specterops.io/automating-dll-hijack-discovery-81c4295904b0) - Tbh has SpecterOps team ever disappointed?
+5. [https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow/](https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow/) - One of the newer posts
+6. [https://redteaming.co.uk/2020/07/12/dll-proxy-loading-your-favorite-c-implant/](https://redteaming.co.uk/2020/07/12/dll-proxy-loading-your-favorite-c-implant/) - Here's to our favourite Flangvik whose work inspired me to look into DLL Hijacks
+
+## Author
+Upayan ([@slaeryan](https://twitter.com/slaeryan)) [[slaeryan.github.io](https://slaeryan.github.io)]
+
+## License
+All the code included in this project(excluding NetClone) is licensed under the terms of the GNU GPLv2 license.
+
+#
+
+[![](https://img.shields.io/badge/slaeryan.github.io-E5A505?style=flat-square)](https://slaeryan.github.io) [![](https://img.shields.io/badge/twitter-@slaeryan-00aced?style=flat-square&logo=twitter&logoColor=white)](https://twitter.com/slaeryan) [![](https://img.shields.io/badge/linkedin-@UpayanSaha-0084b4?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/upayan-saha-404881192/)
 
 
 
