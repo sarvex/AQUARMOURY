@@ -2,7 +2,7 @@
 [![](https://img.shields.io/badge/Category-Defense%20Evasion-E5A505?style=flat-square)]() [![](https://img.shields.io/badge/Language-C%20%2f%20C++%20%2f%20CSharp%20%2f%20Python3-E5A505?style=flat-square)]()
 
 ## Introduction
-`Brownie` is a platform to rapidly prototype and weaponise DLL hijacks. In particular, we are interested in [DLL Search Order Hijacking](https://attack.mitre.org/techniques/T1574/001/) to **sideload our malicious code by a signed and legitimate executable** which is sometimes wrongly(or rightly?) known as [DLL Sideloading](https://attack.mitre.org/techniques/T1574/002/) which has a very specific definition.
+`Brownie` is a platform to rapidly prototype and weaponise DLL hijacks. In particular, we are interested in [DLL Search Order Hijacking](https://attack.mitre.org/techniques/T1574/001/) to **sideload our malicious code by a signed and legitimate executable**. It is sometimes wrongly(or rightly?) known as [DLL Sideloading](https://attack.mitre.org/techniques/T1574/002/) which has a very specific definition.
 
 We are particularly interested in how this technique is an interesting(and often underrated) alternative to **Code Injection** that shares the same objectives i.e. **to evade AV/EDRs by executing malicious code from the address space of a "trusted" process**. We won't be looking at DLL hijacks for LPE or even Persistence as such although it can certainly be adapted for the latter purpose quite easily.
 
@@ -19,9 +19,9 @@ Furthermore, we will be targeting `System32` executables for this demonstration 
 
 So we will be using a slight variation of this technique known as **Relative Path DLL Hijacking** i.e. dropping the malicious DLL in a user-writeable folder and copying the legitimate, signed executable from `System32` to the folder before executing it finally to load our "evil" DLL.
 
-Our first order of business is finding the right candidate for the job. There are many automated tools to do that and I found a wonderful [post](https://github.com/wietze/windows-dll-hijacking) that details almost 300 executables in `System32` that are vulnerable to DLL Hijacking but what kind of hackers would we be if we didn't try to find our own?
+Our first order of business is finding the right candidate for the job. There are many automated tools to do that and I found a wonderful [post](https://github.com/wietze/windows-dll-hijacking) that details almost 300 executables in `System32` that are vulnerable to DLL Hijacking but what kind of hackers would we be if we didn't try to find our own? ;)
 
-Almost always, you'll hear someone say that DLL hijacks in Windows executables are plentiful. I fully agree considering the evidence. But that doesn't always mean that we have found the perfect candidate to exploit.
+Almost always, you'll hear someone say that DLL hijacks in Windows executables are plentiful. I fully agree considering the evidence. But that doesn't always mean that all of them are perfect candidates to exploit.
 
 For example, some applications contain visual elements which upon execution will immediately notify the target effectively rendering it useless for use in covert operations.
 
@@ -53,7 +53,7 @@ Process Monitor logs clearly show that `DUI70.dll` is searched by `LicensingUI.e
 
 Well if you think about it, it's not that the executable is loading the `DUI70` DLL because it just felt like doing so right? After all, it is being loaded for a purpose because the executable needs to perform some function(s) defined in the DLL which our "evil" DLL is obviously missing that in this case also causes the application to not start properly/crash i.e. We do not maintain stability in the target executable.
 
-So how do we solve this problem? By using DLL Proxying or delegating the functionality to the real DLL by linking the export table of "evil" DLL to the original DLL.
+So how do we solve this problem? By using **DLL Proxying** or **delegating the legitimate functionality to the real DLL by linking the export table of "evil" DLL to the original DLL**.
 
 ![DLL Proxying](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/dll-proxying.png "DLL Proxying")
 
@@ -123,10 +123,10 @@ I'd **NOT** recommend using a C2 agent/Egress implant PIC blob as payload for th
 
 So what do we use for payload? I would recommend using a **loader PIC blob as payload** that injects the **Stage-1/Beaconing payload blob** to another process from where network activity is **NOT** considered unusual.
 
-What this technique essentially helps us achieve is cloaking/shielding the malicious activity of **Code Injection** which could give us up especially when dealing with an EDR that doesn't use User-mode hooking to gain visibility into potentially suspicious actions(can be bypassed rather easily using well-placed direct syscalls) but rather **Kernel-mode ETW Threat Intelligence** functions like **MDATP**. It will still **generate telemetry but will probably allow the activity since it is originating from a MS signed, trusted and legitimate binary** :)
+What this technique essentially helps us achieve is cloaking/shielding the malicious activity of **Code Injection** which could give us up especially when dealing with an EDR that doesn't use User-mode hooking to gain visibility into potentially suspicious actions(can be bypassed rather easily using well-placed direct syscalls) but rather relies on **Kernel-mode ETW Threat Intelligence** functions like **MDATP**. It will still **generate telemetry but will probably allow the activity since it is originating from a MS signed, trusted and legitimate binary** :)
 
 ## Detection/Mitigation
-Here is a mandatory [CAPA]() scan result of our `Brownie` DLL:
+Here is a mandatory [CAPA](https://github.com/fireeye/capa) scan result of our `Brownie` DLL:
 
 ![CAPA Result](https://github.com/slaeryan/AQUARMOURY/blob/master/Brownie/Screenshots/capa.PNG "CAPA Result")
 
