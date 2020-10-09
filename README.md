@@ -5,3 +5,8 @@ This is a tool suite consisting of miscellaneous offensive tooling aimed at red 
 First module released as part of the `AQUARMOURY` suite to disable Windows Event and Sysmon logging.
 
 Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Goblin).
+
+## Brownie
+Framework to rapidly prototype DLL Hijacks.
+
+Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie).
