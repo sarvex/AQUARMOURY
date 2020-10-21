@@ -151,16 +151,17 @@ In essence, a lot of false-positives could be weeded out with a rule like this i
 With that being said, I agree that this requires quite a bit of baselining in the target environment to produce high-quality telemetry.
 
 ## Credits
-This section will consist of my favourite posts on DLL Hijacking and the authors from which I have heavily borrowed stuff from:
+This section will consist of some of my favourite posts on DLL Hijacking and the authors from which I have heavily borrowed stuff from:
 
 1. [https://silentbreaksecurity.com/adaptive-dll-hijacking/](https://silentbreaksecurity.com/adaptive-dll-hijacking/) - My favourite post on DLL Hijacking
 2. [https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows](https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows) - Another awesome in-depth post detailing quite a number of binaries
 3. [https://itm4n.github.io/windows-dll-hijacking-clarified/](https://itm4n.github.io/windows-dll-hijacking-clarified/) - Another nice read to clarify some stuff
 4. [https://posts.specterops.io/automating-dll-hijack-discovery-81c4295904b0](https://posts.specterops.io/automating-dll-hijack-discovery-81c4295904b0) - Tbh has SpecterOps team ever disappointed?
-5. [https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow/](https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow/) - One of the newer posts
-6. [https://redteaming.co.uk/2020/07/12/dll-proxy-loading-your-favorite-c-implant/](https://redteaming.co.uk/2020/07/12/dll-proxy-loading-your-favorite-c-implant/) - Here's to our favourite Flangvik whose work inspired me to look into DLL Hijacks
-7. [@SBousseaden](https://twitter.com/sbousseaden) for the detection methodologies
-8. [@reenz0h](https://twitter.com/Sektor7Net) and [RTO: MalDev course](https://institute.sektor7.net/red-team-operator-malware-development-essentials) for the templates that I keep using to this date
+5. [https://www.contextis.com/en/blog/dll-search-order-hijacking](https://www.contextis.com/en/blog/dll-search-order-hijacking) - Another nice read
+6. [https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow/](https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow/) - One of the newer posts
+7. [https://redteaming.co.uk/2020/07/12/dll-proxy-loading-your-favorite-c-implant/](https://redteaming.co.uk/2020/07/12/dll-proxy-loading-your-favorite-c-implant/) - Here's to our favourite Flangvik whose work inspired me to look into DLL Hijacks
+8. [@SBousseaden](https://twitter.com/sbousseaden) for the detection methodologies
+9. [@reenz0h](https://twitter.com/Sektor7Net) and [RTO: MalDev course](https://institute.sektor7.net/red-team-operator-malware-development-essentials) for the templates that I keep using to this date
 
 ## Author
 Upayan ([@slaeryan](https://twitter.com/slaeryan)) [[slaeryan.github.io](https://slaeryan.github.io)]
