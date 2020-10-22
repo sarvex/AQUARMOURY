@@ -54,7 +54,7 @@ Here we can see the respective artifact name and values for `Workstation` and `D
 
 All these elaborate safety measures also help us to protect our IP. In a worst case scenario, our `Payload Staging Server` and `Key Server` are burned but we can still save our later stages - C2 infrastructure and payload. This also partly explains our motivation behind using a loader to deliver the C2 payload.
 
-Here is a screenshot demonstrating the flow:
+Here is a screenshot highlighting the flow:
 
 ![Execution Guardrails](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/execution-guardrail.PNG "Execution Guardrails")
 
@@ -63,7 +63,7 @@ Part of the motivation behind using a loader is **to deliver the payload into th
 
 We have chosen to use a variant of the [Early Bird APC Injection](https://www.ired.team/offensive-security/code-injection-process-injection/early-bird-apc-queue-code-injection) technique because we prioritise a more functional and stable technique over some exotic ROP-based injection containing over 200+ lines of code which is eventually going to get burned :)
 
-I have taken the liberty to change a few things in the original algorithm to aid evasion. Ex: Removed the creation of a suspended process which can be a bit of an IoC. The workaround first creates a process the usual way and then suspends the primary thread.
+I have taken the liberty to change a few things in the original algorithm to aid evasion. Ex: Removed the creation of a suspended process which can be a bit of an **IoC**. **The workaround first creates a process the usual way and then suspends the primary thread**.
 
 But using such a well-known technique comes with a potential problem. It uses some pretty _cursed_ API calls in a particular sequence which are going to be picked up by any half-decent AV/EDR.
 
@@ -93,7 +93,7 @@ So now that we have managed to hide the act of injection itself, how do we prote
 
 Enter [CIG and ACG](https://blog.xpnsec.com/protecting-your-malware/) by [Adam Chester a.k.a. @_xpn_](https://twitter.com/_xpn_)!
 
-`CIG` also popularly known as `blockdlls` **prevents any non-MS signed third-party EDR DLL from being injected into our spawned sacrificial "trusted" process which now contains the C2 payload. 
+`CIG` also popularly known as `blockdlls` **prevents any non-MS signed third-party EDR DLL from being injected into our spawned sacrificial "trusted" process which now contains the C2 payload**. 
 
 But some EDRs were quick to adapt to this mitigation policy and they quickly got their _evil_ DLL signed by MS which would render this useless. Bummer :(
 
