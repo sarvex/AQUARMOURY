@@ -1,0 +1,72 @@
+FLOSS static ASCII strings
+aj,9
+PSQRVWUTAPAQARASATAUAVAW
+UVWATAUAVAWH
+Hc~<H
+;WTr
+Hc{<E
+E98v
+L+W0
+;WTr
+.fA;
+D98u
+E9>u
+twD9y
+A_A^A]A\_^]
+AXIc@<3
+\$ H
+t$(H
+tRich
+.text
+`.rdata
+@.data
+.pdata
+@.reloc
+D$@HcD$@E3
+L$(H
+D$ D
+D$@H
+T$HH
+D$ D
+D$ H
+T$HH
+D$@H
+D$ L
+D$DH
+D$8H
+D$8H
+L$(H
+L$ L
+D$8H
+T$@H
+D$8H
+T$hH
+T$PH
+D$PH
+T$XH
+D$XH
+T$`H
+D$`H
+D$ L
+D$HH
+D$HH
+D$8H
+D$8H
+D$hH
+D$PH
+D$XH
+D$`H
+tvE3
+L$0H
+T$pH
+D$0H
+D$XH
+
+FLOSS static Unicode strings
+
+
+FLOSS decoded 0 strings
+
+FLOSS extracted 0 stackstrings
+
+Finished execution after 0.024260 seconds

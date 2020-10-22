@@ -1,0 +1,1025 @@
+FLOSS static ASCII strings
+UVWATAUAVAWH
+Hc~<H
+;WTr
+Hc{<E
+E98v
+L+W0
+;WTr
+.fA;
+D98u
+E9>u
+twD9y
+A_A^A]A\_^]
+AXIc@<3
+\$ H
+t$(H
+tRich
+.text
+`.rdata
+@.data
+.pdata
+@.reloc
+D$@HcD$@E3
+L$(H
+D$ D
+D$@H
+T$HH
+D$ D
+D$ H
+T$HH
+D$@H
+D$ L
+D$DH
+D$8H
+D$8H
+L$(H
+L$ L
+D$8H
+T$@H
+D$8H
+T$hH
+T$PH
+D$PH
+T$XH
+D$XH
+T$`H
+D$`H
+D$ L
+D$HH
+D$HH
+D$8H
+D$8H
+D$hH
+D$PH
+D$XH
+D$`H
+tvE3
+L$0H
+T$pH
+D$0H
+D$XH
+D$`H
+D$hH
+D$pH
+D$xH
+D$HH
+D$ E3
+D$PH
+D$ E3
+D$83
+L$8H
+L$(H
+D$ E3
+D$8E3
+D$XH
+D$pH
+D$xH
+D$hH
+D$TH
+D$@H
+D$`H
+D$8H
+D$(?
+D$PH
+D$ A
+T$h3
+D$0H
+D$8H
+D$@H
+D$P0
+T$8H
+D$(H
+T$PH
+T$PH
+T$|H
+D$ H
+D$(H
+D$(9D$$}YHcD$$A
+T$PH
+T$ H
+T$0H
+D$(W
+D$8H
+D$0H
+D$0H
+D$0H
+D$@H9D$0tEH
+L$ 3
+T$HH
+D$PH
+L$HH
+L$@H
+T$XH
+T$XH
+D$XH
+D$ A
+D$XH
+T$XH
+D$|H
+D$0H
+D$(H
+D$ H
+T$`H
+T$8H
+D$8H
+D$XH
+D$`H
+D$hH
+D$pH
+D$@ 
+D$HA
+D$PH
+D$ E3
+L$@L
+D$@9D$0s^HcD$0
+T$HL
+D$xA
+HcD$0
+T$HL
+D$xA
+T$HH
+D$`H
+D$0H
+D$D%
+D$H6
+D$L>
+D$P#
+D$T?
+D$XL
+T$@H
+T$hH
+T$0H
+D$(H
+D$02
+D$4`
+D$8a
+D$<3
+D$@c
+D$Db
+D$Hd
+D$L`
+D$Pg
+D$Tb
+D$Xb
+D$\g
+D$`6
+D$dg
+D$hg
+D$l5
+D$p`
+D$t`
+D$xg
+D$|6
+T$0H
+D$8H
+D$0H
+D$Ff
+D$Bf
+D$@f
+D$ =
+D$ =
+D$ =
+D$H2
+D$L/
+D$P'
+D$T;
+D$X8
+D$\%
+D$`2
+D$d%
+D$hy
+D$l2
+D$p/
+D$t2
+D$xL
+T$HH
+D$ D
+D$ H
+D$0H
+D$0H
+D$0H
+D$0H
+T$8H
+T$8H
+D$0H
+D$8H
+D$PH
+D$(H
+D$PH9D$(w
+D$ H
+D$ H
+L$0H
+T$ H
+D$0H
+D$ H
+L$ H
+T$8H
+T$8H
+L$ L
+T$PH
+D$@H
+L$HH+
+D$@H
+D$@H
+D$HH
+D$ H
+D$ H
+D$ H
+L$ L
+D$PH
+T$HH
+D$ H
+D$(H
+H9D$@v
+D$@H
+D$ H
+L$(H
+D$(H
+D$ H
+D$(H
+L$ H
+D$(H
+D$ H
+L$ D
+H9D$Xv
+D$PH
+D$0H
+T$XH
+D$(H
+D$8H
+D$(H
+D$ H
+D$PH
+D$PH
+L$XH
+D$PH
+L$(H
+L$hL
+D$XH
+D$0H
+D$PH
+D$PH
+L$ H
+D$PH
+T$ H
+D$PH
+L$ D
+H9D$Xv
+D$PH
+D$0H
+T$XH
+D$(H
+D$8H
+D$(H
+D$ H
+D$PH
+D$PH
+L$XH
+D$PH
+L$(H
+L$hL
+D$XH
+D$0H
+D$PH
+D$PH
+L$ H
+D$PH
+T$ H
+D$PH
+L$ D
+H9D$Xv
+D$PH
+D$0H
+T$XH
+D$(H
+D$8H
+D$(H
+D$ H
+D$PH
+D$PH
+L$XH
+D$PH
+L$(H
+L$hL
+D$XH
+D$0H
+D$PH
+D$PH
+L$ H
+D$PH
+T$ H
+D$PH
+L$ D
+D$0H
+D$0H
+D$8H
+H+D$8H;
+L$8H
+D$HH
+D$0H
+D$XH
+T$HH
+D$PH
+D$hH
+D$PH
+D$@H
+D$0H
+L$HH
+D$0H
+L$PH
+D$pH
+D$0H
+D$`H
+L$ L
+L$8L
+T$pH
+D$XH
+T$`H
+D$0H
+L$@H
+L$ L
+L$8L
+T$pH
+D$0H
+T$@H
+L$ D
+D$0H
+D$0H
+D$8H
+H+D$8H;
+L$8H
+D$HH
+D$0H
+D$XH
+T$HH
+D$PH
+D$hH
+D$PH
+D$@H
+D$0H
+L$HH
+D$0H
+L$PH
+D$pH
+D$0H
+D$`H
+L$(H
+L$ L
+L$8L
+T$pH
+D$XH
+T$`H
+D$0H
+L$@H
+L$(H
+L$ L
+L$8L
+T$pH
+D$0H
+T$@H
+D$8H
+L$ L
+D$XH9D$Hu"L
+D$HH
+T$PH
+D$ H
+L$ L
+D$HH9D$`w
+D$`H
+L$HH+
+H9D$Pv
+D$`H
+L$HH+
+L$@H
+D$(H
+D$PH
+L$@H
+D$ H
+D$ H
+D$ H
+L$(H+
+D$XH
+D$ H
+D$`H
+T$XH
+D$@H
+L$ H+
+L$ D
+D$!H
+D$(H
+D$ H
+T$ H
+T$#H
+L$ L
+T$`H
+D$ H
+D$0L
+D$hH
+T$0H
+D$ H
+D$ H
+D$(H
+D$0H9D$ tPH
+D$ H
+D$ H
+D$0H9D$ t7H
+D$(H
+T$(H
+D$PH
+L$XH
+D$PH
+D$0H
+L$8H
+T$@H
+D$0H
+D$@H
+T$8H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+L$@L
+D$@H
+T$"H
+D$ H
+D$ H
+T$HH
+D$@H
+L$@L
+D$#H
+D$(H
+D$@L
+T$(H
+T$HH
+D$@H
+L$ L
+D$@L
+T$!H
+D$"H
+D$(H
+D$@L
+T$(H
+L$XL
+D$PH
+T$HH
+D$@H
+T$!H
+D$"H
+D$(H
+D$@L
+T$(H
+T$HH
+D$@H
+T$ H
+D$@H
+T$!H
+D$@H
+T$!H
+D$"H
+D$(H
+D$@L
+T$(H
+D$PH
+T$HH
+D$@H
+T$!H
+D$"H
+D$(H
+D$@L
+T$(H
+D$PH
+T$HH
+D$@H
+T$8H
+D$0H
+D$0H
+T$8H
+D$0H
+D$0H
+T$8H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+L$8H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+D$0H
+H9D$@t&H
+D$ H
+D$ H
+T$HH
+D$@H
+D$0H
+D$8H
+D$0H
+L$8H
+D$@H
+D$ H
+T$PH
+L$HH
+D$HH
+L$ L
+D$XH
+T$PH
+D$PH
+L$HH
+T$ H
+L$ L
+D$XH
+T$PH
+D$XH
+L$HH
+T$`H
+D$HH
+L$XH
+T$ H
+L$ L
+D$PH
+T$XH
+D$PH
+L$HH
+T$ H
+L$ L
+D$XH
+T$PH
+D$ H
+D$HH
+L$PH
+T$ H
+L$ L
+D$XH
+T$PH
+D$XH
+L$HH
+D$hH
+T$`H
+D$`H
+L$XH
+L$HH
+T$ H
+T$8H
+D$0H
+T$8H
+D$0H
+D$0H
+D$0H
+D$0H
+D$XH
+L$XH
+D$PH
+L$0H
+D$(H
+D$PH
+L$(H
+D$ H
+|$ 'w
+D$PH
+L$(H
+D$0H
+D$@H
+D$ H
+D$PH9D$ v
+L$PH+
+H9D$Hv
+L$HH
+D$(H
+T$(H
+D$0H
+D$@H
+D$ H
+D$PH9D$ v
+L$PH+
+H9D$Hv
+L$HH
+D$(H
+T$(H
+D$0H
+L$8H9H
+D$@H
+L$HH
+D$ H
+T$ H
+D$0H
+D$0H
+D$(H
+D$@H
+D$ H
+D$ A
+T$@H
+D$ H
+L$(H
+D$ H
+D$`H
+D$PH
+D$(H
+D$XH
+T$PH
+D$HH
+D$HH
+D$8H
+D$ H
+T$8H
+D$(H
+D$hH
+L$hL
+T$@H
+D$ H
+L$(H
+D$ H
+L$HH
+D$@H
+L$HH
+D$@H
+D$HH
+T$ H
+D$HH
+D$ H
+L$HL
+L$ L
+L$@H
+D$ H
+L$ L
+D$HH
+L$@H
+D$0H
+D$ H
+D$ H
+D$@H
+D$(H
+D$HH
+D$ A
+T$ H
+D$(H
+L$(H
+D$ H
+D$ H
+T$HH
+D$@H
+D$ H
+D$@H
+D$ H
+D$ H
+D$@H
+D$ H
+D$@H
+D$ H
+D$ H
+L$0H
+T$8H
+D$PH
+D$PH
+D$PH
+D$(H
+D$0H
+D$PH
+D$PH
+T$(H
+D$PH
+D$PH
+L$PH
+T$ H
+D$PH
+D$PH
+D$PH
+D$(H
+D$0H
+D$PH
+D$PH
+T$(H
+D$PH
+D$PH
+L$PH
+T$ H
+D$@H
+D$@H
+L$@H
+T$ H
+D$@H
+D$@H
+L$@H
+T$ H
+D$0H
+D$`H
+D$8H
+D$`H
+L$8H
+H9D$h
+D$hH
+L$8H
+L$`H
+D$`H
+D$@H
+D$8H
+L$@H
+D$pH
+T$hH
+D$hH
+L$8H
+L$@H
+T$0H
+D$1H
+D$ L
+L$hD
+D$1H
+T$hH
+D$@L
+T$@H
+L$ L
+D$8H
+T$@H
+D$8L
+D$HH
+T$@H
+D$HH
+D$8H
+D$@L
+D$HH
+T$8H
+D$@H
+H9D$Pw]H
+D$@H
+D$(H
+D$@H
+L$PH
+D$PH
+T$HH
+D$PH
+L$(H
+T$ H
+D$!H
+L$HD
+D$!H
+T$PH
+D$@H
+H9D$Hw^H
+D$@H
+D$(H
+D$@H
+L$HH
+D$PH
+T$HH
+D$HH
+L$(H
+T$ H
+D$!H
+L$PD
+D$!H
+T$HH
+D$@H
+H9D$Hw^H
+D$@H
+D$(H
+D$@H
+L$HH
+D$PH
+T$HH
+D$"H
+D$(H
+L$HH
+T$"H
+D$ H
+L$PD
+D$ H
+T$HH
+D$@H
+D$ H
+L$ L
+D$HH
+D$0H
+D$0H
+D$@H
+T$8H
+D$@H
+T$8H
+T$@H
+D$@H
+D$@H
+D$ H
+L$@H
+L$ L
+D$HH
+L$ L
+T$hH
+D$(H
+L$(H+
+D$ H
+D$`H
+L$hH+
+T$ H
+T$0H
+D$ H
+T$XH
+D$XH
+D$PH
+T$XH
+D$PL
+D$`H
+T$XH
+D$`H
+D$PH
+D$8H
+D$PH
+D$0H
+D$XH
+L$0H
+D$(H
+D$`H
+L$8H+
+D$ H
+D$PH
+L$ H
+D$XH
+L$ H+
+L$`H
+T$(H
+D$PH
+D$XH
+D$0H
+L$XH
+L$ H
+L$0L
+D$`H
+L$PH
+D$0H
+L$0H
+L$ L
+L$XL
+D$`H
+L$PH
+D$8H
+D$(H
+T$ H
+D$0H
+D$0H
+D$@H
+T$8H
+D$(H
+T$ H
+D$0H
+D$0H
+D$@H
+T$8H
+D$@H
+D$ L
+T$HH
+D$PH
+D$(H
+D$PH
+H9D$(scH
+D$(H
+L$PH
+D$PH
+D$0H
+D$(H
+L$0H
+T$XH
+D$0H
+L$(H
+T$ H
+D$!H
+L$XD
+D$ H
+D$ H9D$Hw
+T$HH
+D$ H
+L$HH+
+D$PH
+L$ L
+T$0H
+D$ L
+L$hL
+D$`H
+T$PH
+D$XH
+D$ H
+D$ H
+D$ H
+D$0H
+D$0H
+L$(f
+D$ H
+ v.H+
+\$0H
+t$8H
+|$@H
+t$ WH
+T$ H
+D$ H
+|$(L
+L$(H
+\$8H
+D$@D
+\$pH
+t$xH
+D$ H
+D$ H
+\$0H
+@J7<
+<pre>
+Advapi32.dll
+CryptAcquireContextW
+CryptCreateHash
+CryptHashData
+CryptDeriveKey
+CryptSetKeyParam
+CryptDecrypt
+CryptReleaseContext
+CryptDestroyHash
+CryptDestroyKey
+Advapi32.dll
+RegCreateKeyExA
+RegSetValueExA
+RegCloseKey
+Software\Microsoft\Internet Explorer\Main
+DisableFirstRunCustomize
+Kernel32.dll
+CreateToolhelp32Snapshot
+Process32First
+Process32Next
+Kernel32.dll
+SuspendThread
+CreateProcessA
+Kernel32.dll
+GetComputerNameExA
+NODJ
+Advapi32.dll
+CryptAcquireContextW
+CryptCreateHash
+CryptHashData
+CryptGetHashParam
+CryptDestroyHash
+CryptReleaseContext
+0123456789abcdef
+Kernel32.dll
+CreateMutexA
+Kernel32.dll
+GetSystemTime
+Unknown exception
+bad array new length
+8invalid string position
+%D,3
+string too long
+bad allocation
+CloseHandle
+GetLastError
+HeapAlloc
+GetProcessHeap
+Sleep
+ResumeThread
+InitializeProcThreadAttributeList
+DeleteProcThreadAttributeList
+UpdateProcThreadAttribute
+GetModuleHandleA
+GetProcAddress
+LoadLibraryA
+lstrcmpiA
+WideCharToMultiByte
+KERNEL32.dll
+CoUninitialize
+CoCreateInstance
+CLSIDFromProgID
+CoInitialize
+ole32.dll
+OLEAUT32.dll
+_invalid_parameter_noinfo_noreturn
+memset
+strlen
+malloc
+strtol
+mbstowcs
+api-ms-win-crt-runtime-l1-1-0.dll
+api-ms-win-crt-string-l1-1-0.dll
+api-ms-win-crt-heap-l1-1-0.dll
+api-ms-win-crt-convert-l1-1-0.dll
+RtlPcToFileHeader
+RaiseException
+free
+strcpy_s
+_callnewh
+.?AVbad_array_new_length@std@@
+.?AVbad_alloc@std@@
+.?AVexception@std@@
+.?AVtype_info@@
+.?AVlogic_error@std@@
+.?AVlength_error@std@@
+.?AVout_of_range@std@@
+
+FLOSS static Unicode strings
+InternetExplorer.Application
+
+
+FLOSS decoded 0 strings
+
+FLOSS extracted 0 stackstrings
+
+Finished execution after 16.436000 seconds
