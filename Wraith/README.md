@@ -2,18 +2,21 @@
 [![](https://img.shields.io/badge/Category-Defense%20Evasion-E5A505?style=flat-square)]() [![](https://img.shields.io/badge/Language-C%20%2f%20C++%20%2f%20CSharp%20%2f%20Python3-E5A505?style=flat-square)]()
 
 ## Introduction
-Wraith is a native loader designed to pave the way for the arrival of a **Stage-1/Beaconing implant** or **Stage-2/Post-Ex implant** in memory in a secure and stealthy manner. Specially designed to operate in heavily-monitored environments, it is designed with **PSP Evasion** as its primary goal.
+Wraith is a native loader designed to pave the way for the arrival of a **Stage-1/Beaconing implant** or **Stage-2/Post-Ex implant** in-memory securely and stealthily. Specially designed to operate in heavily-monitored environments, it is designed with **PSP Evasion** as its primary goal.
 
 ## How To Use `Wraith`
-Here is a guide to building `Wraith` in six simple steps:
+Here is a guide to building `Wraith` in seven simple steps:
 ```
 1) git clone https://github.com/slaeryan/AQUARMOURY.git & cd Wraith
-2) cd Src AND Open Config.h in your favourite text editor
-3) Modify the configuration options to match your target
-4) Use Python/StringMangler.py to encrypt the strings in the Config file AND Modifications to other parts of the Src is strictly not necessary
-5) cd .. & compile64.bat
-6) You'll find the compiled DLL, sRDI PIC blob and the ready-to-deploy sgn-encoded PIC blob in the Bin folder
+2) Use Python/AES.py to encrypt the C2 Binary Payload/Shellcode and upload the payload to your staging server and key to the key server as text files
+3) cd Src AND Open Config.h in your favourite text editor
+4) Modify the configuration options to match your target
+5) Use Python/StringMangler.py to encrypt the strings in the Config file AND Modifications to other parts of the Src is strictly not necessary
+6) cd .. & compile64.bat
+7) You'll find the compiled DLL, sRDI PIC blob and the ready-to-deploy sgn-encoded PIC blob in the Bin folder
 ```
+
+A future version of `Wraith` will include a `Python` script to automate the process.
 
 The loader itself is fairly small(`~40 kB`). It is compiled to a DLL and converted into a PIC blob using [sRDI](https://github.com/monoxgas/sRDI) courtesy of [@monoxgas](https://twitter.com/monoxgas?lang=en). It can be executed locally using a `Shellcode Execution Cradle`(Ex: in `C#` cradle for use with `D2JS/G2JS`) or executed directly in-memory via the `Stage-0` payload.
 
@@ -33,11 +36,11 @@ One of the ways EDRs can detect our tooling is by monitoring for processes that 
 So it follows that if we go for **Remote Payload Fetching** then it has to be done from a context from where **network activity is not considered unusual**.
 Ex: Firefox, Chrome, Edge, IE, other browsers etc.
 
-Luckily for us attackers, we can automate an IE browser instance programatically using [IE COM Object](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752084(v=vs.85)) in the background without any visible windows.
+Luckily for us attackers, we can automate an IE browser instance programmatically using [IE COM Object](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752084(v=vs.85)) in the background without any visible windows.
 
 ![IE COM](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/ie-com.PNG "IE COM")
 
-This is an example of how we can fetch arbritary text data from our `Payload Staging Server`(Here seen using `AWS S3 bucket`) with `IE COM Object`.
+This is an example of how we can fetch arbitrary text data from our `Payload Staging Server`(Here seen using `AWS S3 bucket`) with `IE COM Object`.
 
 Pretty neat eh? :)
 
@@ -57,17 +60,17 @@ This is done to:
 To this effect we have implemented 4 safety checks in our loader:
 1) **Mutex Check - To enforce Single-Execution of payload**. This is done by attempting to create a mutex when the loader is executed and checking whether it already exists in which case the loader will terminate immediately. Otherwise, carry on execution as intended. This is obviously necessary since we don't want to execute the payload more than once on the same host whether accidentally or intentionally.
 2) **Kill Date - To render the loader(and by extension the payload) harmless after the engagement ends**. This is done by checking the current date on the host with the hard-coded kill date and if it exceeds the kill date then we simply do not proceed.
-3) **Static Endpoint Validation - To ensure our payload doesn't run on non-targeted assets**. This is done by comparing a `SHA-256` hash of host artifact(Hostname/Domainname) retrieved at runtime with the hard-coded `SHA-256` hash value of the same. If it matches, assume that our code has detonated on a targeted asset and proceed execution otherwise terminate. Additionally, we hard-code the hashed value instead of the plaintext value itself to make the process of identifying the target non-trivial.
+3) **Static Endpoint Validation - To ensure our payload doesn't run on non-targeted assets**. This is done by comparing a `SHA-256` hash of host artefact(Host Name/Domain Name) retrieved at runtime with the hard-coded `SHA-256` hash value of the same. If it matches, assume that our code has detonated on a targeted asset and proceed execution otherwise terminate. Additionally, we hard-code the hashed value instead of the plaintext value itself to make the process of identifying the target non-trivial.
 
 ![Workstation Artifact](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/workstation.PNG "Workstation Artifact")
 
 ![Domain-Joined Artifact](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/domain-joined.PNG "Domain-Joined Artifact")
 
-Here we can see the respective artifact name and values for `Workstation` and `Domain-Joined` machines respectively.
+Here we can see the respective artefact name and values for `Workstation` and `Domain-Joined` machines respectively.
 
 4) **Dynamic Endpoint Validation - To have an emergency payload kill-switch**. This is done by encrypting the payload using `AES-256` in `CBC mode` with a `random IV` and a passphrase that is stored on a remote `Key Server`(again fetched using `IE COM Object`) instead of hard-coding it in the loader itself. This way if we suspect that we might be compromised in any way or blue teams are onto us, we can simply delete the passphrase from the keyserver or replace it with an incorrect one which in turn would make payload decryption and ergo execution fail.
 
-All these elaborate safety measures also help us to protect our IP. In a worst case scenario, our `Payload Staging Server` and `Key Server` are burned but we can still save our later stages - C2 infrastructure and payload. This also partly explains our motivation behind using a loader to deliver the C2 payload.
+All these elaborate safety measures also help us to protect our IP. In a worst-case scenario, our `Payload Staging Server` and `Key Server` are burned but we can still save our later stages - C2 infrastructure and payload. This also partly explains our motivation behind using a loader to deliver the C2 payload.
 
 Here is a screenshot highlighting the flow:
 
@@ -98,9 +101,9 @@ But using such a well-known technique comes with a potential problem. It uses so
 
 Next question is to hardcode or not?
 
-We have chosen to use hardcoded syscall stubs for our loader thanks to [@j00ru](https://twitter.com/j00ru?lang=en) [syscall table](https://j00ru.vexillium.org/syscalls/nt/64/). However, considering the fact that syscall numbers change between diffrent versions of the OS and sometimes even between different Windows 10 builds, this is probably not a good choice(with DevOps people already flustered :)) The other alternative is extracting the syscall stub from `Ntdll` at runtime to free us of the requirement of hardcoding them. However, in my opinion this is a trade-off between stealth vs scalability with the former being slightly stealthier than the latter especially during RE of the implant(Ex: reading `Ntdll` from disk, looping through Export Table etc.). For red-team engagements with thorough reconnaisance of the target, hardcoding syscall stubs typically shouldn't be a problem though.
+We have chosen to use hardcoded syscall stubs for our loader thanks to [@j00ru](https://twitter.com/j00ru?lang=en) [syscall table](https://j00ru.vexillium.org/syscalls/nt/64/). However, considering the fact that syscall numbers change between different versions of the OS and sometimes even between different Windows 10 builds, this is probably not a good choice(with DevOps people already flustered :)) The other alternative is extracting the syscall stub from `Ntdll` at runtime to free us of the requirement of hardcoding them. However, in my opinion, this is a trade-off between stealth vs scalability with the former being slightly stealthier than the latter especially during RE of the implant(Ex: reading `Ntdll` from disk, looping through Export Table etc.). For red-team engagements with thorough reconnaissance of the target, hardcoding syscall stubs typically shouldn't be a problem though.
 
-There is an implementation of dynamic syscalls known as [HellsGate](https://github.com/am0nsec/HellsGate) by [@am0nsec](https://twitter.com/am0nsec?lang=en) and [@smelly_vx](https://twitter.com/smelly__vx) but in the present form EDR trampolines potentially renders it useless :( 
+There is an implementation of dynamic syscalls known as [HellsGate](https://github.com/am0nsec/HellsGate) by [@am0nsec](https://twitter.com/am0nsec?lang=en) and [@smelly_vx](https://twitter.com/smelly__vx) but in the present form, EDR trampolines potentially render it useless :( 
 
 Another viable alternative created by [@modexp](https://twitter.com/modexpblog) uses [Exception Directory to read the syscall stub](https://modexp.wordpress.com/2020/06/01/syscalls-disassembler/).
 
@@ -114,7 +117,7 @@ And this shows how our injection technique with direct syscalls would look throu
 
 As we can see, our injection wasn't intercepted by our _EDR_ and the **assumption here being that the EDR relies on Ring-3/User-Mode hooks instead of KernelMode ETW Threat Intelligence functions to gain visibility into potentially suspicious actions**(which most of them do thanks to MS :))
 
-Oh and if you're wondering about the `NtAllocateVirtualMemory/NtWriteVirtualMemory` calls, it is actually called internally by `CreateProcessA` as visible from the Call Stack and the ones in the beginning highlighted in red are acually related to the `loader.exe` which inline-executes our injector blob and do not pertain to our remote injection technique itself as visible from the first argument which is `GetCurrentProcess`.
+Oh, and if you're wondering about the `NtAllocateVirtualMemory/NtWriteVirtualMemory` calls, it is actually called internally by `CreateProcessA` as visible from the Call Stack and the ones at the beginning highlighted in red are actually related to the execution cradle which inline-executes our injector blob and do not pertain to our remote injection technique itself as visible from the first argument which is `GetCurrentProcess`.
 
 So now that we have managed to hide the act of injection itself, how do we protect our C2 payload which is proprietary and the source unavailable for modification?
 
@@ -124,7 +127,7 @@ Enter [CIG and ACG](https://blog.xpnsec.com/protecting-your-malware/) by [Adam C
 
 But some EDRs were quick to adapt to this mitigation policy and they quickly got their _evil_ DLL signed by MS which would render this useless. Bummer :(
 
-Fortunately for us, there exists another mitigation policy known as `ACG` or `Arbritary Code Guard` which **prevents a process's ability to allocate new executable pages and/or change existing executable page protections which is required for EDR trampolines to work**. This means that EDR _evil_ DLL injection would fail even if it were signed ;)
+Fortunately for us, there exists another mitigation policy known as `ACG` or `Arbitrary Code Guard` which **prevents a process's ability to allocate new executable pages and/or change existing executable page protections which is required for EDR trampolines to work**. This means that EDR _evil_ DLL injection would fail even if it were signed ;)
 
 The caveat here is that [Cobalt Strike payload Beacon](https://www.cobaltstrike.com/help-beacon) is currently **NOT** compatible with `ACG` and would break it. So readers be forewarned!
 
@@ -156,14 +159,14 @@ This can be verified using [PE-Sieve](https://github.com/hasherezade/pe-sieve) t
 
 Another alternative is using [SiR Injection]() i.e. to hijack thread execution by redirecting `RIP` register to our payload using `GetThreadContext/SetThreadContext`.
 
-Furthermore, we compile our loader DLL with a custom MS DOS stub(with `/STUB` linker flag) that does not contain the message `This program can not be run in DOS mode`. Not that it would matter anyway because we delete the PE header of the loader PIC blob after reflective loading using the `-c` flag of `sRDI`.
+Furthermore, we compile our loader DLL with a custom MS-DOS stub(with `/STUB` linker flag) that does not contain the message `This program can not be run in DOS mode`. Not that it would matter anyway because we delete the PE header of the loader PIC blob after reflective loading using the `-c` flag of `sRDI`.
 
 Quoting from the [sRDI](https://github.com/monoxgas/sRDI) project:
 ```
 SRDI_CLEARHEADER [0x1]: The DOS Header and DOS Stub for the target DLL are completley wiped with null bytes on load (Except for e_lfanew). This might cause issues with stock windows APIs when supplying the base address as a psuedo HMODULE.
 ```
 
-Now, obviously this wouldn't do anything for the injected payload. Some possible improvements could include integration of [Gargoyle](https://github.com/JLospinoso/gargoyle) i.e. using ROP activators to hide in non-executable memory in periodic intervals or when a memory scan is triggered due to some suspicious API calls. Also, the injection technique itself could be improved by using something like [AEP Injection]() i.e. To overwrite the image entry point of our sacrificial process with our payload. 
+Now, obviously, this wouldn't do anything for the injected payload. Some possible improvements could include the integration of [Gargoyle](https://github.com/JLospinoso/gargoyle) i.e. using ROP activators to hide in non-executable memory in periodic intervals or when a memory scan is triggered due to some suspicious API calls. Also, the injection technique itself could be improved by using something like [AEP Injection]() i.e. To overwrite the image entry point of our sacrificial process with our payload. 
 
 ### Static Detection - `Polymorphic Encoder + Sensitive String Obfuscation`
 To hinder Blue Teams from signaturing our loader PIC blob, I have taken the liberty to polymorphic encode the loader shellcode with [sgn](https://github.com/EgeBalci/sgn) courtesy of [Ege Balci](https://twitter.com/egeblc).
@@ -179,7 +182,7 @@ And here's how the same shellcode looks after a single pass from a polymorphic e
 Furthermore, we dynamically resolve most of the _suspicious_ API functions at runtime using `LoadLibraryA/GetModuleHandleA + GetProcAddress` to achieve a clean import table.
 
 Apart from this, we also obfuscate/encrypt sensitive strings in the loader with a single byte `XOR` key to prevent blue teams from running something like `strings` or [floss](https://github.com/fireeye/flare-floss) on our shellcode to obtain sensitive strings.
-Ex: The `Payload Staging Server` URL, `Key Server` URL, Hashed artifact value, Mutex Name and so on.
+Ex: The `Payload Staging Server` URL, `Key Server` URL, Hashed artefact value, Mutex Name and so on.
 
 ## Detections
 This post would be incomplete without briefly mentioning some of the ways by which we can detect our tooling.
@@ -209,6 +212,8 @@ Here's a screenshot showing detection of `PPID Spoofing`:
 ![PPIDetector](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/detect-ppid-spoofing.PNG "PPIDetector")
 
 Remember how we said that `PPID Spoofing` [can be detected](https://www.ired.team/offensive-security/defense-evasion/parent-process-id-ppid-spoofing)? This is done by creating a trace session using `Microsoft-Windows-Kernel-Process` as an ETW provider and correlating between `ExecutionProcessID` and `ParentProcessID` field.
+
+I have included the built and `ILMerge`d PoC to detect `PPID Spoofing`.
 
 Lastly, here is a memory sweep of the payload process/sacrificial process with [Moneta](https://github.com/forrest-orr/moneta):
 
