@@ -4,7 +4,22 @@
 ## Introduction
 Wraith is a native loader designed to pave the way for the arrival of a **Stage-1/Beaconing implant** or **Stage-2/Post-Ex implant** in memory in a secure and stealthy manner. Specially designed to operate in heavily-monitored environments, it is designed with **PSP Evasion** as its primary goal.
 
-The loader itself is fairly small(`~40 kB`) and converted into a PIC blob using [sRDI](https://github.com/monoxgas/sRDI) courtesy of [@monoxgas](https://twitter.com/monoxgas?lang=en). It can be executed locally using a `Shellcode Execution Cradle`(Ex: in `C#` cradle for use with `D2JS/G2JS`) or executed directly in-memory via the `Stage-0` payload.
+## How To Use `Wraith`
+Here is a guide to building `Wraith` in six simple steps:
+```
+1) git clone https://github.com/slaeryan/AQUARMOURY.git & cd Wraith
+2) cd Src AND Open Config.h in your favourite text editor
+3) Modify the configuration options to match your target
+4) Use Python/StringMangler.py to encrypt the strings in the Config file AND Modifications to other parts of the Src is strictly not necessary
+5) cd .. & compile64.bat
+6) You'll find the compiled DLL, sRDI PIC blob and the ready-to-deploy sgn-encoded PIC blob in the Bin folder
+```
+
+The loader itself is fairly small(`~40 kB`). It is compiled to a DLL and converted into a PIC blob using [sRDI](https://github.com/monoxgas/sRDI) courtesy of [@monoxgas](https://twitter.com/monoxgas?lang=en). It can be executed locally using a `Shellcode Execution Cradle`(Ex: in `C#` cradle for use with `D2JS/G2JS`) or executed directly in-memory via the `Stage-0` payload.
+
+Here's an overview of the flow:
+
+![Running Wraith](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/running-wraith.PNG "Running Wraith")
 
 Read below to know what are some of the OPSEC concerns faced by existing toolings and how `Wraith` aims to solve some of them.
 
@@ -34,7 +49,7 @@ Luckily for us attackers(again!), MS provides with an interface known as [IUrlHi
 
 This way we can ensure that we leave absolutely no traces behind ;)
 
-### Execution on Non-targeted asset/Sandbox/Emulator - `Execution Guardrails`
+### Execution on Non-targeted asset/Sandbox - `Execution Guardrails`
 This is done to:
 1) To prevent the accidental breaking of the rules of engagement. This will ensure that our malcode doesn’t end being executed on any unintended host which are out of the scope
 2) To protect IP and hinder the efforts of blue teams trying to reverse engineer the implant on non-targeted assets and thwart analysis on automated malware sandboxes, AV/EDR emulators etc.
@@ -58,12 +73,24 @@ Here is a screenshot highlighting the flow:
 
 ![Execution Guardrails](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/execution-guardrail.PNG "Execution Guardrails")
 
+And here's how it looks when executed on a non-targeted asset:
+
+![Non Targeted](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/non-targeted.PNG "Non Targeted")
+
 ### Detection of Injection/C2 payload - `"Advanced Bird" APC Injection`
 Part of the motivation behind using a loader is **to deliver the payload into the address space of a legitimate, signed and trusted process from where the beaconing network activity is not going to be flagged.** This is achieved using Process Injection.
 
 We have chosen to use a variant of the [Early Bird APC Injection](https://www.ired.team/offensive-security/code-injection-process-injection/early-bird-apc-queue-code-injection) technique because we prioritise a more functional and stable technique over some exotic ROP-based injection containing over 200+ lines of code which is eventually going to get burned :)
 
-I have taken the liberty to change a few things in the original algorithm to aid evasion. Ex: Removed the creation of a suspended process which can be a bit of an **IoC**. **The workaround first creates a process the usual way and then suspends the primary thread**.
+This technique in its base form relies on spawning a "trusted" sacrificial process in a suspended state, allocating memory/writing the payload to the target process and finally queuing an APC routine to the primary suspended thread pointing to the shellcode before resuming the thread to execute our malcode.
+
+Even though Sysmon is going to report a **Process Creation Event(Sysmon Event ID 1)**, it has some potential benefits:
+1) **We do not rely on `OpenProcess` to get a handle to an external process which is going to be detected by `ObRegisterCallbacks`**
+2) **We can fully take the advantage of mitigation policies such as `CIG/ACG` to protect our injected C2 payload**
+
+And needless to say, Sysmon currently cannot detect APC process injection(MDATP however can via `THREATINT_QUEUEUSERAPC_REMOTE_KERNEL_CALLER`!).
+
+I have taken the liberty to change a few things in the original algorithm to aid in evasion. Ex: Removed the creation of a suspended process which can be a bit of an **IoC**. **The workaround first creates a process the usual way and then suspends the primary thread**.
 
 But using such a well-known technique comes with a potential problem. It uses some pretty _cursed_ API calls in a particular sequence which are going to be picked up by any half-decent AV/EDR.
 
@@ -89,11 +116,11 @@ As we can see, our injection wasn't intercepted by our _EDR_ and the **assumptio
 
 Oh and if you're wondering about the `NtAllocateVirtualMemory/NtWriteVirtualMemory` calls, it is actually called internally by `CreateProcessA` as visible from the Call Stack and the ones in the beginning highlighted in red are acually related to the `loader.exe` which inline-executes our injector blob and do not pertain to our remote injection technique itself as visible from the first argument which is `GetCurrentProcess`.
 
-So now that we have managed to hide the act of injection itself, how do we protect our C2 payload?
+So now that we have managed to hide the act of injection itself, how do we protect our C2 payload which is proprietary and the source unavailable for modification?
 
 Enter [CIG and ACG](https://blog.xpnsec.com/protecting-your-malware/) by [Adam Chester a.k.a. @_xpn_](https://twitter.com/_xpn_)!
 
-`CIG` also popularly known as `blockdlls` **prevents any non-MS signed third-party EDR DLL from being injected into our spawned sacrificial "trusted" process which now contains the C2 payload**. 
+`CIG` also popularly known as `blockdlls` is a MS mitigation policy that **prevents any non-MS signed third-party DLL(Ex: EDR Hooking DLL) from being injected into our spawned sacrificial "trusted" process which now contains the C2 payload**. 
 
 But some EDRs were quick to adapt to this mitigation policy and they quickly got their _evil_ DLL signed by MS which would render this useless. Bummer :(
 
@@ -120,24 +147,90 @@ Now of course nothing is foolproof and these features are not without flaws. For
 
 `PPID Spoofing` can be detected too using `ETW`(More on this later in the `Detections` section).
 
-### Memory Analysis - `Delete PE Headers`
+### Memory Analysis - `Thread Execution Hijacking`
+To hinder memory analysis, we have chosen to use a variant of `APC Injection` which **hijacks the execution flow of the primary thread of our sacrificial process instead of creating a remote thread in the target process which is unbacked by a module on disk ergo trivial to detect** using tools such as [Get-InjectedThread](https://gist.github.com/jaredcatkinson/23905d34537ce4b5b1818c3e6405c1d2).
 
-### Static Detection - `Sensitive String Obfuscation + Encoder`
+This can be verified using [PE-Sieve](https://github.com/hasherezade/pe-sieve) too:
 
-To Be Continued...
+![PE Sieve](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/pesieve.PNG "PE Sieve")
 
+Another alternative is using [SiR Injection]() i.e. to hijack thread execution by redirecting `RIP` register to our payload using `GetThreadContext/SetThreadContext`.
 
+Furthermore, we compile our loader DLL with a custom MS DOS stub(with `/STUB` linker flag) that does not contain the message `This program can not be run in DOS mode`. Not that it would matter anyway because we delete the PE header of the loader PIC blob after reflective loading using the `-c` flag of `sRDI`.
 
+Quoting from the [sRDI](https://github.com/monoxgas/sRDI) project:
+```
+SRDI_CLEARHEADER [0x1]: The DOS Header and DOS Stub for the target DLL are completley wiped with null bytes on load (Except for e_lfanew). This might cause issues with stock windows APIs when supplying the base address as a psuedo HMODULE.
+```
 
+Now, obviously this wouldn't do anything for the injected payload. Some possible improvements could include integration of [Gargoyle](https://github.com/JLospinoso/gargoyle) i.e. using ROP activators to hide in non-executable memory in periodic intervals or when a memory scan is triggered due to some suspicious API calls. Also, the injection technique itself could be improved by using something like [AEP Injection]() i.e. To overwrite the image entry point of our sacrificial process with our payload. 
 
+### Static Detection - `Polymorphic Encoder + Sensitive String Obfuscation`
+To hinder Blue Teams from signaturing our loader PIC blob, I have taken the liberty to polymorphic encode the loader shellcode with [sgn](https://github.com/EgeBalci/sgn) courtesy of [Ege Balci](https://twitter.com/egeblc).
 
+Here's how a "stock" shellcode looks on VT:
 
+![Unencoded Shellcode](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/unencoded-shellcode.png "Unencoded Shellcode")
 
+And here's how the same shellcode looks after a single pass from a polymorphic encoder:
 
+![Encoded Shellcode](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/encoded-shellcode.png "Encoded Shellcode")
 
+Furthermore, we dynamically resolve most of the _suspicious_ API functions at runtime using `LoadLibraryA/GetModuleHandleA + GetProcAddress` to achieve a clean import table.
 
+Apart from this, we also obfuscate/encrypt sensitive strings in the loader with a single byte `XOR` key to prevent blue teams from running something like `strings` or [floss](https://github.com/fireeye/flare-floss) on our shellcode to obtain sensitive strings.
+Ex: The `Payload Staging Server` URL, `Key Server` URL, Hashed artifact value, Mutex Name and so on.
 
+## Detections
+This post would be incomplete without briefly mentioning some of the ways by which we can detect our tooling.
 
+Here is a mandatory [CAPA](https://github.com/fireeye/capa) scan result of the loader shellcode:
 
+![CAPA](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/capa.PNG "CAPA")
 
+Note that it provides us with almost no intel since we have a clean import table.
 
+And here is the Sysmon log using [SwiftOnSecurity's Sysmon config](https://github.com/SwiftOnSecurity/sysmon-config) of running `Wraith` on the host:
+
+![Sysmon](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/wraith-sysmon.PNG "Sysmon")
+
+The red `+` denotes that these two events(Sysmon Event ID 1 & 5) are not a part of the loader blob and can be avoided in a real-life operation. The rest of the events reported are quite obvious as one might expect. There's a Process Creation Event of the sacrificial process, another process creation event of the `IE Browser` and a DNS Query Event(Sysmon Event ID 22) fired from the browser.
+
+Note that if we enabled Process Access Event(Sysmon Event ID 10), we would have gotten at least one handle access for obtaining a handle to the parent process for `PPID Spoofing`. 
+
+Here is a [YARA](https://github.com/VirusTotal/yara) rule to detect hardcoded direct syscalls courtesy of [Samir Bousseaden a.k.a @SBousseaden](https://twitter.com/sbousseaden):
+
+![YARA](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/yara.PNG "YARA")
+
+The rule is included in the repo.
+
+Here's a screenshot showing detection of `PPID Spoofing`:
+
+![PPIDetector](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/detect-ppid-spoofing.PNG "PPIDetector")
+
+Remember how we said that `PPID Spoofing` [can be detected](https://www.ired.team/offensive-security/defense-evasion/parent-process-id-ppid-spoofing)? This is done by creating a trace session using `Microsoft-Windows-Kernel-Process` as an ETW provider and correlating between `ExecutionProcessID` and `ParentProcessID` field.
+
+Lastly, here is a memory sweep of the payload process/sacrificial process with [Moneta](https://github.com/forrest-orr/moneta):
+
+![Moneta](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/moneta.PNG "Moneta")
+
+It does provide us with an alert saying `Abnormal private RX memory` which may not always necessarily indicate that something's wrong but it definitely means that it is worth a second look and in this case we inspect further with ProcessHacker to confirm that the memory flagged by `Moneta` does indeed contain our payload(`MessageBox` in our case).
+
+## Credits
+1. [@_xpn_](https://twitter.com/_xpn_) for introducing `ACG/CIG` for implant safety
+2. [@MWRLabs](https://twitter.com/mwrinfosecurity?lang=en) for [Safer Shellcode Implants](https://labs.f-secure.com/archive/safer-shellcode-implants/)
+3. [@spotheplanet](https://twitter.com/spotheplanet) and [ired.team](https://www.ired.team/) for interesting tidbits used throughout the post
+4. [@dtm](https://twitter.com/0x00dtm) for the wonderful OPSEC discussions on [0x00sec VIP](https://discord.com/invite/c6BHVfn)
+5. As usual, [@reenz0h](https://twitter.com/Sektor7Net) and [RTO: MalDev course](https://institute.sektor7.net/red-team-operator-malware-development-essentials) for the templates that I keep using to this date.
+6. [@monoxgas](https://twitter.com/monoxgas?lang=en) for sRDI.
+7. [@SBousseaden](https://twitter.com/sbousseaden) for the detection methodologies.
+
+## Author
+Upayan ([@slaeryan](https://twitter.com/slaeryan)) [[slaeryan.github.io](https://slaeryan.github.io)]
+
+## License
+All the code included in this project is licensed under the terms of the GNU GPLv2 license.
+
+#
+
+[![](https://img.shields.io/badge/slaeryan.github.io-E5A505?style=flat-square)](https://slaeryan.github.io) [![](https://img.shields.io/badge/twitter-@slaeryan-00aced?style=flat-square&logo=twitter&logoColor=white)](https://twitter.com/slaeryan) [![](https://img.shields.io/badge/linkedin-@UpayanSaha-0084b4?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/upayan-saha-404881192/)
