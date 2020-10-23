@@ -115,7 +115,7 @@ And this shows how our injection technique with direct syscalls would look throu
 
 ![API Monitor Undetected](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/api-monitor-undetected.PNG "API Monitor Undetected")
 
-As we can see, our injection wasn't intercepted by our _EDR_ and the **assumption here being that the EDR relies on Ring-3/User-Mode hooks instead of KernelMode ETW Threat Intelligence functions to gain visibility into potentially suspicious actions**(which most of them do thanks to MS :))
+As we can see, our injection wasn't intercepted by our _EDR_ and the **assumption here being that the EDR relies on Ring-3/User-Mode hooks instead of KernelMode ETW Threat Intelligence functions to gain visibility into potentially suspicious actions**(which most of them do not thanks to MS :))
 
 Oh, and if you're wondering about the `NtAllocateVirtualMemory/NtWriteVirtualMemory` calls, it is actually called internally by `CreateProcessA` as visible from the Call Stack and the ones at the beginning highlighted in red are related to the shellcode execution cradle which inline-executes our injector blob and does not pertain to our remote injection technique itself as visible from the first argument which is `GetCurrentProcess`.
 
@@ -142,6 +142,7 @@ Here's how it looks in-action:
 ![Protecting C2 Payload](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/wraith-acg-ppid.PNG "Protecting C2 Payload")
 
 In this way we can counter the holy trio of EDR detection using:
+
 **1) API hooking - Direct Syscalls + CIG/ACG**
 **2) Abnormal parent-child process relationships - PPID Spoofing**
 **3) Logging network activity of processes - Injection into a legitimate process**
