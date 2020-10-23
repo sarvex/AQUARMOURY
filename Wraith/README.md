@@ -8,7 +8,7 @@ Wraith is a native loader designed to pave the way for the arrival of a **Stage-
 Here is a guide to building `Wraith` in seven simple steps:
 ```
 1) git clone https://github.com/slaeryan/AQUARMOURY.git & cd Wraith
-2) Use Python/AES.py to encrypt the C2 Binary Payload/Shellcode and upload the payload to your staging server and key to the key server as text files
+2) Use Python/AES.py to encrypt the C2 Binary Payload/Shellcode and upload the payload to your staging server and the passphrase to the key server as text files
 3) cd Src AND Open Config.h in your favourite text editor
 4) Modify the configuration options to match your target
 5) Use Python/StringMangler.py to encrypt the strings in the Config file AND Modifications to other parts of the Src is strictly not necessary
@@ -88,7 +88,7 @@ We have chosen to use a variant of the [Early Bird APC Injection](https://www.ir
 This technique in its base form relies on spawning a "trusted" sacrificial process in a suspended state, allocating memory/writing the payload to the target process and finally queuing an APC routine to the primary suspended thread pointing to the shellcode before resuming the thread to execute our malcode.
 
 Even though Sysmon is going to report a **Process Creation Event(Sysmon Event ID 1)**, it has some potential benefits:
-1) **We do not rely on `OpenProcess` to get a handle to an external process which is going to be detected by `ObRegisterCallbacks`**
+1) **We do not rely on `OpenProcess` to get a handle to an external process which is going to be detected by tools using `ObRegisterCallbacks`**
 2) **We can fully take the advantage of mitigation policies such as `CIG/ACG` to protect our injected C2 payload**
 
 And needless to say, Sysmon currently cannot detect APC process injection(MDATP however can via `THREATINT_QUEUEUSERAPC_REMOTE_KERNEL_CALLER`!).
@@ -107,7 +107,7 @@ There is an implementation of dynamic syscalls known as [HellsGate](https://gith
 
 Another viable alternative created by [@modexp](https://twitter.com/modexpblog) uses [Exception Directory to read the syscall stub](https://modexp.wordpress.com/2020/06/01/syscalls-disassembler/).
 
-This is a screenshot of using "normal" APC Injection without syscalls which clearly shows that our API calls were intercepted by our pseudo-EDR a.k.a. API Monitor:
+This is a screenshot of using "normal" APC Injection without syscalls which clearly shows that our API calls were intercepted by our pseudo-EDR a.k.a. [API Monitor](http://www.rohitab.com/apimonitor):
 
 ![API Monitor Detected](https://github.com/slaeryan/AQUARMOURY/blob/master/Wraith/Screenshots/api-monitor-detected.PNG "API Monitor Detected")
 
@@ -117,7 +117,7 @@ And this shows how our injection technique with direct syscalls would look throu
 
 As we can see, our injection wasn't intercepted by our _EDR_ and the **assumption here being that the EDR relies on Ring-3/User-Mode hooks instead of KernelMode ETW Threat Intelligence functions to gain visibility into potentially suspicious actions**(which most of them do thanks to MS :))
 
-Oh, and if you're wondering about the `NtAllocateVirtualMemory/NtWriteVirtualMemory` calls, it is actually called internally by `CreateProcessA` as visible from the Call Stack and the ones at the beginning highlighted in red are actually related to the execution cradle which inline-executes our injector blob and do not pertain to our remote injection technique itself as visible from the first argument which is `GetCurrentProcess`.
+Oh, and if you're wondering about the `NtAllocateVirtualMemory/NtWriteVirtualMemory` calls, it is actually called internally by `CreateProcessA` as visible from the Call Stack and the ones at the beginning highlighted in red are related to the shellcode execution cradle which inline-executes our injector blob and does not pertain to our remote injection technique itself as visible from the first argument which is `GetCurrentProcess`.
 
 So now that we have managed to hide the act of injection itself, how do we protect our C2 payload which is proprietary and the source unavailable for modification?
 
@@ -166,9 +166,9 @@ Quoting from the [sRDI](https://github.com/monoxgas/sRDI) project:
 SRDI_CLEARHEADER [0x1]: The DOS Header and DOS Stub for the target DLL are completley wiped with null bytes on load (Except for e_lfanew). This might cause issues with stock windows APIs when supplying the base address as a psuedo HMODULE.
 ```
 
-Now, obviously, this wouldn't do anything for the injected payload. Some possible improvements could include the integration of [Gargoyle](https://github.com/JLospinoso/gargoyle) i.e. using ROP activators to hide in non-executable memory in periodic intervals or when a memory scan is triggered due to some suspicious API calls. Also, the injection technique itself could be improved by using something like [AEP Injection]() i.e. To overwrite the image entry point of our sacrificial process with our payload. 
+Now, this wouldn't do anything for the injected payload. Some possible improvements could include the integration of [Gargoyle](https://github.com/JLospinoso/gargoyle) i.e. using ROP activators to hide in non-executable memory in periodic intervals or when a memory scan is triggered due to some suspicious API calls. Also, the injection technique itself could be improved by using something like [AEP Injection]() i.e. To overwrite the image entry point of our sacrificial process with our payload. 
 
-### Static Detection - `Polymorphic Encoder + Sensitive String Obfuscation`
+### Static Detection - `Polymorphic Encoder + Sensitive String Obfuscation + Dynamic API Resolving`
 To hinder Blue Teams from signaturing our loader PIC blob, I have taken the liberty to polymorphic encode the loader shellcode with [sgn](https://github.com/EgeBalci/sgn) courtesy of [Ege Balci](https://twitter.com/egeblc).
 
 Here's how a "stock" shellcode looks on VT:
