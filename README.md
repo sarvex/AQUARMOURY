@@ -10,3 +10,8 @@ Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Goblin).
 Framework to rapidly prototype DLL Hijacks.
 
 Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie).
+
+## Wraith
+A stealthy native loader to deliver `Stage-1/Beaconing` implant OR `Stage-2/Post-Ex` RAT in-memory covertly and securely.
+
+Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Wraith).
