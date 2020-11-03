@@ -89,7 +89,7 @@ This mapping can also be done using memory-mapped files using [CreateFileMapping
 
 The reason being:
 
-![Why Syscalls](https://github.com/slaeryan/AQUARMOURY/blob/master/Shellycoat/Screenshots/why-syscalls.png "Why Syscalls")
+![Why Syscalls](https://github.com/slaeryan/AQUARMOURY/blob/master/Shellycoat/Screenshots/why-syscall.png "Why Syscalls")
 
 As shown in the above screenshot from a [blogpost](https://www.cyberbit.com/blog/endpoint-security/malware-mitigation-when-direct-system-calls-are-used/) by [CyberBit](https://www.cyberbit.com/), this technique itself can be potentially detected using hooks.
 
@@ -114,13 +114,13 @@ Implant - 2 | EDR - 2 :)
 ## Demo
 Because screenshots or it didn't happen ;)
 
+The GIF below shows inline hooking `NtCreateFile` with [Detours](https://github.com/microsoft/Detours) by injecting the hooking DLL(`edr.dll`) into `notepad.exe` to pop a MessageBox every time the user tries to save a file.
+
 ![Hooking](https://github.com/slaeryan/AQUARMOURY/blob/master/Shellycoat/Screenshots/hooking.gif "Hooking")
 
-The above shows inline hooking `NtCreateFile` with [Detours](https://github.com/microsoft/Detours) by injecting the hooking DLL(`edr.dll`) into `notepad.exe` to pop a MessageBox every time the user tries to save a file.
+And this demonstrates how we "unhook" the hooks again by injecting `shellycoat_x64.dll` to map a clean copy of `Ntdll` from disk and overwrite the hooked `.text` section of loaded `Ntdll` thereby regaining the ability to save files again.
 
 ![Unhooking](https://github.com/slaeryan/AQUARMOURY/blob/master/Shellycoat/Screenshots/unhooking.gif "Unhooking")
-
-And this demonstrates how we "unhook" the hooks again by injecting `shellycoat_x64.dll` to map a clean copy of `Ntdll` from disk and overwrite the hooked `.text` section of loaded `Ntdll` thereby regaining the ability to save files again.
 
 ## Credits
 1. [@dtm](https://twitter.com/0x00dtm) for [https://0x00sec.org/t/defeating-userland-hooks-ft-bitdefender/12496](https://0x00sec.org/t/defeating-userland-hooks-ft-bitdefender/12496)
