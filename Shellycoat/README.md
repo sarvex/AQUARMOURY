@@ -98,7 +98,7 @@ Fret not because [Direct Hard-Coded Syscalls/BYOI](https://outflank.nl/blog/2019
 
 What we are doing here essentially is **using direct syscalls to invoke the functions related to the process of unhooking itself as opposed to using the loaded and hooked `Ntdll` to perform `Section Remapping`**.
 
-The pros of this method as compared to `Lagos Island method`/using NtReadFile and manually mapping a fresh copy of `ntdll.dll` from the disk is that the **secondary DLL will be mapped as an image and it will appear loaded in a typical fashion by the Windows loader**.
+The pros of this method as compared to `Lagos Island method`/using NtReadFile and manually mapping a fresh copy of `ntdll.dll` from the disk is that the **secondary DLL will be mapped as an image and it will appear loaded in a typical fashion by the PE loader**.
 
 The following snippet of a table from [CyberBit's blog post]() might make it clearer:
 
