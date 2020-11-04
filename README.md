@@ -15,3 +15,8 @@ Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie).
 A stealthy native loader to deliver `Stage-1/Beaconing` implant OR `Stage-2/Post-Ex` RAT in-memory covertly and securely.
 
 Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Wraith).
+
+## Shellycoat
+A module to bypass UM/User-Mode/Ring-3 hooks utilised by security products and aid in evasion.
+
+Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Shellycoat).
