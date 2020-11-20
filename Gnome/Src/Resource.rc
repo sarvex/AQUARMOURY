@@ -1,0 +1,3 @@
+#include "resource.h"
+
+RID_PAYLOAD BINARY "..\\Bin\\payload_x64.sys"
