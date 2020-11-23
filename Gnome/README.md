@@ -6,7 +6,7 @@
 
 It can be used to **drop'n'load your signed rootkit** in the target environment. It can also be used to load a vulnerable signed driver to execute **arbitrary Ring-0 code for privilege escalation/disabling PPL/disabling DSE/disabling EDR callbacks etc**.
 
-While this tool may not directly aid in Defence Evasion, think of it as a very smol utility to aid in leading up to the events of bypassing defences :)
+While this tool may not directly aid in Defence Evasion, think of it as a very smol utility to aid in the events leading up to the bypassing of defences :)
 
 ## Usage
 Here is a guide to building the tool in easy steps:
@@ -34,7 +34,7 @@ As with all my other writeups, I tend to include as little code as possible in t
 So here goes the algorithm of the code that should help understand what goes on under the hood without having to wade through my shitty code (lol! although brownie points for doing so).
 
 When `Gnome` is executed in-memory, the flow of its operation is quite simple and it goes something like this:
-1. The payload driver that is embedded in the resource section of the `Gnome` module is extracted and stored locally before it is written to disk in the pre-specified location.
+1. The payload driver that is embedded in the resource section of the `Gnome` module is extracted and stored in-memory before it is written to disk in the pre-specified location.
 2. Next step is enabling the privilege in the access token that is required to load drivers known as `SeLoadDriverPrivilege/SE_LOAD_DRIVER_NAME`. It should be worth noting that this privilege is not available in a medium-IL process token to be enabled in the first place implying medium-IL processes shouldn't normally be able to load drivers which of course makes sense right?
 3. Our next step is creating a couple of registry keys(and subkeys) and setting their respective values which are required for loading drivers via this technique. First, we create a key at `HKLM\SYSTEM\CurrentControlSet\Services\<driver name>` and four subkeys called `ImagePath`, `Type`, `Start` and `ErrorControl` under it. Then the values of the subkeys are set to driver path on disk, 1 (this is a kernel driver), 3 (we want a manual load) and finally 0 (since we do not load driver at startup) respectively.
 Here's a screenshot that might help visualise this:
@@ -63,7 +63,7 @@ And here is a screenshot showing Sysmon logs of running Gnome:
 
 ![Sysmon](https://github.com/slaeryan/AQUARMOURY/blob/master/Gnome/Screenshots/sysmon.PNG "Sysmon")
 
-As expected, there are a couple of `Sysmon Event ID 13`s denoting registry value modifications as made while preparing to load the driver and finally the big event - `Sysmon Event ID 6` denoting that a driver was loaded successfully.
+As expected, there are a couple of `Sysmon Event ID 13`'s denoting registry value modifications as made while preparing to load the driver and finally the big event - `Sysmon Event ID 6` denoting that a driver was loaded successfully.
 
 One of the detection strategies could include monitoring for these events for known vulnerable drivers such as the GigaByte driver shown in the above screenshot.
 
