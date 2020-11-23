@@ -50,6 +50,7 @@ void go(HMODULE hMod) {
 		unload_driver(DRIVER_NAME);
 	
 	// Cleanup
+	DeleteFileW(DRIVER_PATH);
 	delete_reg_keys(DRIVER_NAME);
 }
 
