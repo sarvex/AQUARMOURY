@@ -20,3 +20,8 @@ Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Wraith).
 A module to bypass UM/User-Mode/Ring-3 hooks utilised by security products and aid in evasion.
 
 Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Shellycoat).
+
+## Gnome
+A module to drop'n'load drivers using NtLoadDriver instead of the noisy service creation driver loading.
+
+Check it out [here](https://github.com/slaeryan/AQUARMOURY/tree/master/Gnome).
