@@ -53,22 +53,29 @@ def decodeString(cipherText):
     
 def main():
     try:
-        if len(sys.argv) == 3:
-            operation = sys.argv[1]
-            string = sys.argv[2]
-        else:
+        if len(sys.argv) != 3:
             raise
+        operation = sys.argv[1]
+        string = sys.argv[2]
     except:
         print(__doc__)
         sys.exit(0)
-    
+
     todo = None
-    
-    if operation == 'encode':
-        
-        if os.path.isfile(string): todo = open(string, 'r').readlines()
-        else: todo = string
-        
+
+    if operation == 'decode':
+        todo = open(string, 'r').readlines() if os.path.isfile(string) else string
+        if type(todo).__name__ == 'list':
+            for do in todo:
+                do = do.replace('\n', '')
+                do = do.replace('\r', '')
+                print("\n%s -> %s\n" % (do, decodeString(do)))
+        else:
+            todo = todo.replace('\n', '')
+            todo = todo.replace('\r', '')
+            print("\n%s -> %s\n" % (todo, decodeString(todo)))
+    elif operation == 'encode':
+        todo = open(string, 'r').readlines() if os.path.isfile(string) else string
         if type(todo).__name__ == 'list':
             for do in todo:
                 do = do.replace('\n', '')
@@ -78,21 +85,7 @@ def main():
             todo = todo.replace('\n', '')
             todo = todo.replace('\r', '')
             print("\n%s -> %s\n" % (todo, encodeString(todo)))
-    
-    elif operation == 'decode':
-        
-        if os.path.isfile(string): todo = open(string, 'r').readlines()
-        else: todo = string
-        
-        if type(todo).__name__ == 'list':
-            for do in todo:
-                do = do.replace('\n', '')
-                do = do.replace('\r', '')
-                print("\n%s -> %s\n" % (do, decodeString(do)))
-        else:
-            todo = todo.replace('\n', '')
-            todo = todo.replace('\r', '')
-            print("\n%s -> %s\n" % (todo, decodeString(todo)))     
+
     else:
         print(__doc__)
         sys.exit(0)

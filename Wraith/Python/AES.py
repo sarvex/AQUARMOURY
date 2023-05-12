@@ -43,13 +43,13 @@ if __name__ == "__main__":
 	try:
 		data = binascii.b2a_hex(open(sys.argv[1], "rb").read()).decode()
 	except:
-		print("Error reading %s" % sys.argv[1])
+		print(f"Error reading {sys.argv[1]}")
 		sys.exit(0)
-		
+
 	plaintext_hex = "".join(re.findall("..", data))
 
 	ciphertext_hex, iv_hex = aes_encrypt(plaintext_hex, AESKEY)
 
-	print("Ciphertext: " + ciphertext_hex + "\n")
-	print("Random IV: " + iv_hex + "\n")
-	print("Encrypted Payload: " + ciphertext_hex + iv_hex)
+	print(f"Ciphertext: {ciphertext_hex}" + "\n")
+	print(f"Random IV: {iv_hex}" + "\n")
+	print(f"Encrypted Payload: {ciphertext_hex}{iv_hex}")

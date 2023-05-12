@@ -43,17 +43,15 @@ if __name__ == "__main__":
 	try:
 		data = binascii.b2a_hex(open(sys.argv[1], "rb").read()).decode()
 	except:
-		print("Error reading %s" % sys.argv[1])
+		print(f"Error reading {sys.argv[1]}")
 		sys.exit(0)
-		
+
 	plaintext_hex = "".join(re.findall("..", data))
 
 	ciphertext, iv = aes_encrypt(plaintext_hex, AESKEY)
 
 	ciphertext = ciphertext + iv
 
-	file = open(sys.argv[2], "wb")
-	file.write(ciphertext)
-	file.close()
-
+	with open(sys.argv[2], "wb") as file:
+		file.write(ciphertext)
 	print("[+] Done")
